@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "rn-assessment",
+    "slug": "rn-assessment",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "rn-assessment"
+}
