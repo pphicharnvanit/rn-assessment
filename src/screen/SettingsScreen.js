@@ -3,7 +3,6 @@ import { StyleSheet, Text, View, Switch } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { EventRegister } from 'react-native-event-listeners';
 import themeContext from "../config/themeContext";
-import theme from "../config/theme";
 
 const SettingsScreen = () => {
     const theme = useContext(themeContext);

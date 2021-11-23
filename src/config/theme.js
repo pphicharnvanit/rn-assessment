@@ -5,9 +5,14 @@ const theme = {
         tabBar: "#2196F3",
         active: "white",
         inActive: "#9E9E9E",
-        background: "white",
+        background: "#FAFAFA",
         textTitle: "black",
+        textIcon: "black",
         textBody: "black",
+        selectedButton: "#2196F3",
+        unSelectedButton: "#9B9B9B",
+        selectedText: "white",
+        unSelectedText: "black",
     },
     dark: {
         theme: "dark",
@@ -17,7 +22,12 @@ const theme = {
         inActive: "#9E9E9E",
         background: "#303030",
         textTitle: "white",
+        textIcon: "white",
         textBody: "#B5B5B5",
+        selectedButton: "#212121",
+        unSelectedButton: "#808080",
+        selectedText: "white",
+        unSelectedText: "white",
     },
 };
 
