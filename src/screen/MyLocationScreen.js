@@ -1,27 +1,29 @@
 import React, { useContext } from "react";
+import { useSelector } from "react-redux";
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
-import themeContext from "../config/themeContext";
+import theme from "../context/theme";
 
 const MyLocationScreen = () => {
-    const theme = useContext(themeContext);
+    const settingsState = useSelector((state) => state.settings);
+    const themeApp = settingsState.value.isDarkMode === true ? theme.dark : theme.light;
     return (
-        <View style={{ backgroundColor: theme.background, flex: 1 }}>
+        <View style={{ backgroundColor: themeApp.background, flex: 1 }}>
             <TouchableOpacity onPress={() =>
                 // navigation.navigate('Show')
                 console.log('Show')
             }>
                 <View style={styles.row}>
-                    <Entypo style={styles.icon} name="location-pin" color={theme.textIcon} />
+                    <Entypo style={styles.icon} name="location-pin" color={themeApp.textIcon} />
                     <Text style={{
                         fontSize: 18,
                         flex: 2,
                         marginStart: 20,
-                        color: theme.textBody
+                        color: themeApp.textBody
                     }}>Mountain View</Text>
                     <TouchableOpacity onPress={() => console.log('delete')}>
-                        <Feather style={styles.icon} name="trash" color={theme.textIcon} />
+                        <Feather style={styles.icon} name="trash" color={themeApp.textIcon} />
                     </TouchableOpacity>
                 </View>
             </TouchableOpacity>
@@ -30,15 +32,15 @@ const MyLocationScreen = () => {
                 console.log('Show')
             }>
                 <View style={styles.row}>
-                    <Entypo style={styles.icon} name="location-pin" color={theme.textIcon} />
+                    <Entypo style={styles.icon} name="location-pin" color={themeApp.textIcon} />
                     <Text style={{
                         fontSize: 18,
                         flex: 2,
                         marginStart: 20,
-                        color: theme.textBody
+                        color: themeApp.textBody
                     }}>Mountain View</Text>
                     <TouchableOpacity onPress={() => console.log('delete')}>
-                        <Feather style={styles.icon} name="trash" color={theme.textIcon} />
+                        <Feather style={styles.icon} name="trash" color={themeApp.textIcon} />
                     </TouchableOpacity>
                 </View>
             </TouchableOpacity>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { weatherApi } from "../api/weatherApi";
 import * as Location from "expo-location";
 
@@ -6,26 +6,27 @@ const useWeather = () => {
   const [weatherInfo, setWeatherInfo] = useState(null);
   const [currentLocation, setCurrentLocation] = useState(null);
 
-  const getWeather = async ({ index }) => {
-    const unit = index == 0 ? 'metric' : 'imperial';
+  const getWeather = async () => {
     try {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
+        console.log(status);
         return;
       }
-
-      setCurrentLocation(await Location.getCurrentPositionAsync({}))
+      const location = await Location.getCurrentPositionAsync({});
+      setCurrentLocation(location.coords);
 
       const { data } = await weatherApi.get('/onecall',
         {
           params: {
-            lat: currentLocation.coords.latitude,
-            lon: currentLocation.coords.longitude,
+            lat: currentLocation.latitude,
+            // lat: 13.938346,
+            lon: currentLocation.longitude,
+            // lon: 100.3161132,
             exclude: 'minutely,hourly,alerts',
-            units: unit
+            units: 'imperial'
           }
         });
-
       setWeatherInfo(data);
     } catch (error) {
       console.log(error);

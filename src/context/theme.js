@@ -27,7 +27,7 @@ const theme = {
         selectedButton: "#212121",
         unSelectedButton: "#808080",
         selectedText: "white",
-        unSelectedText: "white",
+        unSelectedText: "black",
     },
 };
 
