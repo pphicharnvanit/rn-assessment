@@ -1,6 +1,7 @@
 const theme = {
     light: {
         theme: "light",
+        primary: "white",
         header: "#2196F3",
         tabBar: "#2196F3",
         active: "white",
@@ -13,9 +14,11 @@ const theme = {
         unSelectedButton: "#9B9B9B",
         selectedText: "white",
         unSelectedText: "black",
+        cardBackground: "white"
     },
     dark: {
         theme: "dark",
+        primary: "black",
         header: "#424242",
         tabBar: "#212121",
         active: "white",
@@ -28,6 +31,7 @@ const theme = {
         unSelectedButton: "#808080",
         selectedText: "white",
         unSelectedText: "black",
+        cardBackground: "#424242"
     },
 };
 

@@ -17,7 +17,7 @@ export const fetchCurrentWeather = createAsyncThunk(
         });
       return data;
     } catch (error) {
-      console.log(error);
+      throw error;
     }
 
   }
@@ -25,7 +25,7 @@ export const fetchCurrentWeather = createAsyncThunk(
 
 const weatherSlice = createSlice({
   name: "weather",
-  initialState: { value: [null], isLoading: false },
+  initialState: { value: null, isLoading: false },
   reducers: {
   },
   extraReducers: (builder) => {
@@ -34,8 +34,8 @@ const weatherSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(fetchCurrentWeather.fulfilled, (state, action) => {
-        state.isLoading = false;
         state.value = action.payload;
+        state.isLoading = false;
       })
       .addCase(fetchCurrentWeather.rejected, (state, action) => {
         state.isLoading = false;
