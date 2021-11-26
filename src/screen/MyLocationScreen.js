@@ -1,18 +1,19 @@
 import React, { useContext } from "react";
 import { useSelector } from "react-redux";
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import theme from "../context/theme";
 
 const MyLocationScreen = () => {
     const settingsState = useSelector((state) => state.settings);
+    const interestLocationState = useSelector((state) => state.interestLocation);
     const themeApp = settingsState.value.isDarkMode === true ? theme.dark : theme.light;
     return (
         <View style={{ backgroundColor: themeApp.background, flex: 1 }}>
             <TouchableOpacity onPress={() =>
                 // navigation.navigate('Show')
-                console.log('Show')
+                console.log(interestLocationState)
             }>
                 <View style={styles.row}>
                     <Entypo style={styles.icon} name="location-pin" color={themeApp.textIcon} />
@@ -22,24 +23,26 @@ const MyLocationScreen = () => {
                         marginStart: 20,
                         color: themeApp.textBody
                     }}>Mountain View</Text>
-                    <TouchableOpacity onPress={() => console.log('delete')}>
-                        <Feather style={styles.icon} name="trash" color={themeApp.textIcon} />
-                    </TouchableOpacity>
-                </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() =>
-                // navigation.navigate('Show')
-                console.log('Show')
-            }>
-                <View style={styles.row}>
-                    <Entypo style={styles.icon} name="location-pin" color={themeApp.textIcon} />
-                    <Text style={{
-                        fontSize: 18,
-                        flex: 2,
-                        marginStart: 20,
-                        color: themeApp.textBody
-                    }}>Mountain View</Text>
-                    <TouchableOpacity onPress={() => console.log('delete')}>
+                    <TouchableOpacity onPress={() => {
+                        Alert.alert(
+                            "Removing Location",
+                            "Do you want to remove this location?",
+                            [
+                                {
+                                    text: "Yes",
+                                    onPress: () => {
+                                        console.log('yes');
+                                    },
+                                },
+                                {
+                                    text: "Cancel",
+                                },
+                            ],
+                            {
+                                cancelable: true,
+                            }
+                        );
+                    }}>
                         <Feather style={styles.icon} name="trash" color={themeApp.textIcon} />
                     </TouchableOpacity>
                 </View>

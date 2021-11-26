@@ -2,17 +2,17 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { weatherApi } from "../api/weatherApi";
 
 export const fetchCurrentWeather = createAsyncThunk(
-  "weather/fetchCurrentWeather", async (unitsTemp) => {
+  "weather/fetchCurrentWeather", async (settingsValue) => {
     try {
       const { data } = await weatherApi.get('/onecall',
         {
           params: {
-            // lat: currentLocation.latitude,
-            lat: 13.938346,
-            // lon: currentLocation.longitude,
-            lon: 100.3161132,
+            lat: settingsValue.location.lat ?? 13.938346,
+            // lat: 13.938346,
+            lon: settingsValue.location.lon ?? 100.3161132,
+            // lon: 100.3161132,
             exclude: 'minutely,hourly,alerts',
-            units: unitsTemp
+            units: settingsValue.unitsTemp
           }
         });
       return data;

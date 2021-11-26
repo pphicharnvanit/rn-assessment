@@ -11,13 +11,14 @@ const TempButtonGroup = () => {
     const dispatch = useDispatch();
     const settingsState = useSelector((state) => state.settings);
     const themeApp = settingsState.value.isDarkMode === true ? theme.dark : theme.light;
+    const settingsValue = settingsState.value;
 
     return (
         <ButtonGroup
             onPress={async (index) => {
                 const units = index == 0 ? 'metric' : 'imperial';
                 dispatch(updateTemp(`${units}`));
-                dispatch(fetchCurrentWeather(units));
+                dispatch(fetchCurrentWeather(settingsValue));
             }}
             selectedIndex={settingsState.value.unitsTemp == 'metric' ? 0 : 1}
             buttons={['Celsius ', 'Fahrenheit']}
