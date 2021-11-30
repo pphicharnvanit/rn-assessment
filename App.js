@@ -30,7 +30,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
   settings: settingsReducer,
   weather: weatherReducer,
-  interestLocation: interestLocationReducer,
+  interestLocation: interestLocationReducer
 });
 
 const persistedReducers = persistReducer(persistConfig, rootReducer);

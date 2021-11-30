@@ -1,69 +1,60 @@
-import React, { useContext } from "react";
-import { useSelector } from "react-redux";
-import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
-import { Entypo } from '@expo/vector-icons';
-import { Feather } from '@expo/vector-icons';
-import theme from "../context/theme";
+import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { Text, View, TouchableOpacity } from 'react-native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const MyLocationScreen = () => {
+import { getWeatherData } from "../context/WeatherContext";
+import LocationListItem from "../components/LocationListItem";
+
+import theme from "../context/theme";
+import { FlatList } from "react-native-gesture-handler";
+import { MaterialIcons } from '@expo/vector-icons';
+
+const MyLocationScreen = ({ navigation }) => {
+    const dispatch = useDispatch();
     const settingsState = useSelector((state) => state.settings);
+    const weatherState = useSelector((state) => state.weather);
     const interestLocationState = useSelector((state) => state.interestLocation);
     const themeApp = settingsState.value.isDarkMode === true ? theme.dark : theme.light;
+
+    const { getItem, setItem } = AsyncStorage;
+
+    async function storeData() {
+        try {
+            await setItem("weatherData", JSON.stringify(weatherState.value));
+            navigation.goBack();
+        } catch (error) {
+            alert(error);
+        }
+    }
+
     return (
-        <View style={{ backgroundColor: themeApp.background, flex: 1 }}>
-            <TouchableOpacity onPress={() =>
-                // navigation.navigate('Show')
-                console.log(interestLocationState)
-            }>
-                <View style={styles.row}>
-                    <Entypo style={styles.icon} name="location-pin" color={themeApp.textIcon} />
-                    <Text style={{
-                        fontSize: 18,
-                        flex: 2,
-                        marginStart: 20,
-                        color: themeApp.textBody
-                    }}>Mountain View</Text>
-                    <TouchableOpacity onPress={() => {
-                        Alert.alert(
-                            "Removing Location",
-                            "Do you want to remove this location?",
-                            [
-                                {
-                                    text: "Yes",
-                                    onPress: () => {
-                                        console.log('yes');
-                                    },
-                                },
-                                {
-                                    text: "Cancel",
-                                },
-                            ],
-                            {
-                                cancelable: true,
-                            }
-                        );
-                    }}>
-                        <Feather style={styles.icon} name="trash" color={themeApp.textIcon} />
-                    </TouchableOpacity>
-                </View>
-            </TouchableOpacity>
-        </View>
+        <>
+            {
+                interestLocationState?.value
+                    ? < View style={{ backgroundColor: themeApp.background, flex: 1 }}>
+                        <FlatList
+                            data={interestLocationState.value}
+                            keyExtractor={item => item.id}
+                            renderItem={({ item }) => {
+                                return (
+                                    <TouchableOpacity onPress={() => {
+                                        dispatch(getWeatherData(item.location));
+                                        storeData();
+                                    }}>
+                                        <LocationListItem data={item} />
+                                    </TouchableOpacity>
+                                )
+                            }}
+                        />
+                    </View>
+                    : <View style={{ backgroundColor: themeApp.background, flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                        <MaterialIcons name="location-off" size={192} color={themeApp.textTitle} />
+                        <Text style={{ color: themeApp.textTitle, fontWeight: 'bold', fontSize: 24 }}>No Data Found</Text>
+                    </View>
+            }
+        </>
     );
 };
-
-const styles = StyleSheet.create({
-    row: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        paddingVertical: 20,
-        borderBottomWidth: 1,
-        paddingHorizontal: 10,
-        borderColor: 'gray'
-    },
-    icon: {
-        fontSize: 24,
-        paddingEnd: 10
-    }
-});
 
 export default MyLocationScreen;

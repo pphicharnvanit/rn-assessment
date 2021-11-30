@@ -7,9 +7,9 @@ export const fetchCurrentWeather = createAsyncThunk(
       const { data } = await weatherApi.get('/onecall',
         {
           params: {
-            lat: settingsValue.location.lat ?? 13.938346,
+            lat: settingsValue.location.lat,
             // lat: 13.938346,
-            lon: settingsValue.location.lon ?? 100.3161132,
+            lon: settingsValue.location.lon,
             // lon: 100.3161132,
             exclude: 'minutely,hourly,alerts',
             units: settingsValue.unitsTemp
@@ -27,6 +27,9 @@ const weatherSlice = createSlice({
   name: "weather",
   initialState: { value: null, isLoading: false },
   reducers: {
+    getWeatherData: (state, action) => {
+      state.value = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -43,6 +46,6 @@ const weatherSlice = createSlice({
   },
 });
 
-export const { } = weatherSlice.actions;
+export const { getWeatherData } = weatherSlice.actions;
 
 export default weatherSlice.reducer;

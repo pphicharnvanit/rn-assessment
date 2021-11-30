@@ -14,7 +14,7 @@ const settingsSlice = createSlice({
             state.value.isDarkMode = action.payload;
         },
         setCurrentLocation: (state, action) => {
-            state.value.location = action.payload;
+            state.value = action.payload;
         },
         updateTemp: (state, action) => {
             state.value.unitsTemp = action.payload;

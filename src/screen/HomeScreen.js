@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { StyleSheet, Text, Image, View, ScrollView, ActivityIndicator, FlatList } from 'react-native';
+import { StyleSheet, Text, Image, View, ActivityIndicator, FlatList } from 'react-native';
 
 import theme from "../context/theme";
 import TempButtonGroup from "../components/TempButtonGroup";

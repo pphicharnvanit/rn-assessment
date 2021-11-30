@@ -3,21 +3,25 @@ import { createSlice } from "@reduxjs/toolkit";
 const interestLocationSlice = createSlice({
     name: "interestLocation",
     initialState: {
-        value: [null]
+        value: []
     },
     reducers: {
         addLocation: (state, action) => {
-            state.value = action.payload;
+            const location = {
+                id: Math.floor(Math.random() * 99999),
+                location: action.payload
+            }
+            state.value = [...state.value, location];
         },
-        removeLocation: (state, action) => {
-            // state.value.unitsTemp = action.payload;
+        deleteLocation: (state, action) => {
+            state.value = state.value.filter((item) => item.id !== action.payload);
         },
     },
 });
 
 export const {
     addLocation,
-    removeLocation
+    deleteLocation
 } = interestLocationSlice.actions;
 
 export default interestLocationSlice.reducer;
