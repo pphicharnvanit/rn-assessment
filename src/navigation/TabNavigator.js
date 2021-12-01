@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { View, TouchableOpacity, Alert } from "react-native";
+import { View, TouchableOpacity, Alert, StyleSheet } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import * as Location from "expo-location";
 import * as Network from 'expo-network';
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getData, storeData } from "../context/StorageContext";
 
 import { fetchCurrentWeather, getWeatherData } from "../context/WeatherContext";
 import { setCurrentLocation } from "../context/SettingsContext";
@@ -25,12 +25,10 @@ export default function TabNavigator({ navigation }) {
     const settingsState = useSelector((state) => state.settings);
     const settingsValue = settingsState.value;
     const weatherState = useSelector((state) => state.weather);
-    const { getItem, setItem } = AsyncStorage;
     const themeApp = settingsState.value.isDarkMode === true ? theme.dark : theme.light;
 
-
     async function fetchMyData() {
-        const weatherData = await getItem("weatherData");
+        const weatherData = await getData();
         if (weatherData != null) {
             dispatch(getWeatherData(JSON.parse(weatherData)));
         } else {
@@ -41,15 +39,7 @@ export default function TabNavigator({ navigation }) {
             const location = await Location.getCurrentPositionAsync({});
             dispatch(setCurrentLocation({ location: { lat: location.coords.latitude, lon: location.coords.longitude } }));
             dispatch(fetchCurrentWeather(settingsValue));
-            storeData();
-        }
-    }
-
-    async function storeData() {
-        try {
-            await setItem("weatherData", JSON.stringify(weatherState.value));
-        } catch (error) {
-            alert(error);
+            await storeData(weatherState.value);
         }
     }
 
@@ -89,7 +79,7 @@ export default function TabNavigator({ navigation }) {
                     ),
                     headerTitleAlign: 'left',
                     headerRight: () => (
-                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                        <View style={styles.row}>
                             <TouchableOpacity onPress={() => navigation.navigate('Search')}>
                                 <AntDesign name="search1" size={24} color={themeApp.active} style={{ marginRight: 20 }} />
                             </TouchableOpacity>
@@ -152,3 +142,10 @@ export default function TabNavigator({ navigation }) {
         </Tab.Navigator>
     );
 }
+const styles = StyleSheet.create({
+    row: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center'
+    }
+})

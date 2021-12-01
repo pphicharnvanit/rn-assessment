@@ -20,7 +20,7 @@ const DailyForecastList = ({ itemList }) => {
     return (
         <List.Section style={{ marginHorizontal: 1, marginBottom: 1 }}>
             <List.Accordion
-                title={<Text style={{ fontWeight: 'bold', color: themeApp.textTitle, fontSize: 18 }}>{formatted}</Text>}
+                title={<Text style={[styles.title, { color: themeApp.textTitle }]}>{formatted}</Text>}
                 expanded={expanded}
                 onPress={handlePress}
                 style={{ backgroundColor: themeApp.cardBackground }}
@@ -28,13 +28,13 @@ const DailyForecastList = ({ itemList }) => {
                 <List.Item style={{ backgroundColor: themeApp.cardBackground }} title={
                     <View style={{ flexDirection: 'row' }}>
                         <View style={{ flexDirection: 'column' }}>
-                            <Text style={{ fontWeight: 'bold', color: themeApp.textTitle, fontSize: 16 }}>{itemList.weather[0].description}</Text>
+                            <Text style={[styles.text, { color: themeApp.textTitle }]}>{itemList.weather[0].description}</Text>
                             <Text style={{ color: themeApp.textTitle }}>Feel like  {parseInt(itemList.feels_like.day)} °{units}</Text>
                             <Text style={{ color: themeApp.textTitle }}>Min  {parseInt(itemList.temp.min)} °{units}   Max  {parseInt(itemList.temp.max)} °{units}</Text>
                             <Text style={{ color: themeApp.textTitle }}>humidity  {itemList.humidity} %</Text>
                         </View>
                         <View style={{ flexDirection: 'row' }}>
-                            <Text style={{ fontWeight: 'bold', color: themeApp.textTitle, fontSize: 16 }}>{parseInt(itemList.temp.day)} °{units}</Text>
+                            <Text style={[styles.text, { color: themeApp.textTitle }]}>{parseInt(itemList.temp.day)} °{units}</Text>
                         </View>
                     </View>
                 } />
@@ -44,6 +44,14 @@ const DailyForecastList = ({ itemList }) => {
 }
 
 const styles = StyleSheet.create({
+    title: {
+        fontWeight: 'bold',
+        fontSize: 18
+    },
+    text: {
+        fontWeight: 'bold',
+        fontSize: 16
+    }
 });
 
 export default DailyForecastList;

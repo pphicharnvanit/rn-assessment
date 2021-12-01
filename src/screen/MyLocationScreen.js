@@ -1,14 +1,14 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Text, View, TouchableOpacity } from 'react-native';
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { View, TouchableOpacity } from 'react-native';
+import { storeData } from "../context/StorageContext";
 
 import { getWeatherData } from "../context/WeatherContext";
 import LocationListItem from "../components/LocationListItem";
 
+import NotFoundPage from "../components/NotFoundPage";
 import theme from "../context/theme";
 import { FlatList } from "react-native-gesture-handler";
-import { MaterialIcons } from '@expo/vector-icons';
 
 const MyLocationScreen = ({ navigation }) => {
     const dispatch = useDispatch();
@@ -17,30 +17,20 @@ const MyLocationScreen = ({ navigation }) => {
     const interestLocationState = useSelector((state) => state.interestLocation);
     const themeApp = settingsState.value.isDarkMode === true ? theme.dark : theme.light;
 
-    const { getItem, setItem } = AsyncStorage;
-
-    async function storeData() {
-        try {
-            await setItem("weatherData", JSON.stringify(weatherState.value));
-            navigation.goBack();
-        } catch (error) {
-            alert(error);
-        }
-    }
-
     return (
         <>
             {
-                interestLocationState?.value
+                interestLocationState?.value.length != 0
                     ? < View style={{ backgroundColor: themeApp.background, flex: 1 }}>
                         <FlatList
                             data={interestLocationState.value}
                             keyExtractor={item => item.id}
                             renderItem={({ item }) => {
                                 return (
-                                    <TouchableOpacity onPress={() => {
+                                    <TouchableOpacity onPress={async () => {
                                         dispatch(getWeatherData(item.location));
-                                        storeData();
+                                        await storeData(weatherState.value);
+                                        navigation.goBack();
                                     }}>
                                         <LocationListItem data={item} />
                                     </TouchableOpacity>
@@ -48,10 +38,7 @@ const MyLocationScreen = ({ navigation }) => {
                             }}
                         />
                     </View>
-                    : <View style={{ backgroundColor: themeApp.background, flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                        <MaterialIcons name="location-off" size={192} color={themeApp.textTitle} />
-                        <Text style={{ color: themeApp.textTitle, fontWeight: 'bold', fontSize: 24 }}>No Data Found</Text>
-                    </View>
+                    : <NotFoundPage />
             }
         </>
     );

@@ -14,12 +14,7 @@ const LocationListItem = ({ data }) => {
     return (
         <View style={styles.row}>
             <Entypo style={styles.icon} name="location-pin" color={themeApp.textIcon} />
-            <Text style={{
-                fontSize: 18,
-                flex: 2,
-                marginStart: 20,
-                color: themeApp.textBody
-            }}>{data.location.timezone}</Text>
+            <Text style={[styles.title, { color: themeApp.textBody }]}>{data.location.timezone}</Text>
             <TouchableOpacity onPress={() => {
                 Alert.alert(
                     "Removing Location",
@@ -58,6 +53,11 @@ const styles = StyleSheet.create({
     icon: {
         fontSize: 24,
         paddingEnd: 10
+    },
+    title: {
+        fontSize: 18,
+        flex: 2,
+        marginStart: 20,
     }
 });
 

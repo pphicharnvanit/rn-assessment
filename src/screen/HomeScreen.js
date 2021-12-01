@@ -6,7 +6,7 @@ import theme from "../context/theme";
 import TempButtonGroup from "../components/TempButtonGroup";
 import DailyForecastCard from "../components/DailyForecastCard";
 import DailyForecastList from "../components/DailyForecastList";
-import { MaterialIcons } from '@expo/vector-icons';
+import NotFoundPage from "../components/NotFoundPage";
 
 const HomeScreen = () => {
     const settingsState = useSelector((state) => state.settings);
@@ -18,15 +18,9 @@ const HomeScreen = () => {
     }
 
     return (
-        <View style={{
-            backgroundColor: themeApp.background,
-            paddingHorizontal: 10,
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center'
-        }}>
-            {weatherState?.value ?
-                <FlatList
+        <View style={[styles.bg, { backgroundColor: themeApp.background, }]}>
+            {weatherState?.value
+                ? <FlatList
                     data={weatherState.value.daily}
                     keyExtractor={item => item.dt}
                     marginTop={5}
@@ -37,28 +31,21 @@ const HomeScreen = () => {
                     }}
                     ListHeaderComponent={
                         <>
-                            <Text style={{
-                                fontSize: 22,
-                                fontWeight: 'bold',
-                                alignSelf: 'center',
-                                color: themeApp.textTitle
-                            }}>
+                            <Text style={[styles.title, { color: themeApp.textTitle }]}>
                                 {weatherState.value.timezone}
                             </Text>
                             <View style={{ flexDirection: 'row' }}>
                                 <Image source={{ uri: `http://openweathermap.org/img/wn/${weatherState.value.current.weather[0].icon}@4x.png` }} style={{ height: 160, width: 200 }} />
-                                <View style={{ flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                                    <Text style={{ fontSize: 18, fontWeight: 'bold', color: themeApp.textTitle }}>{parseInt(weatherState.value.current.temp)} °{settingsState.value.unitsTemp == 'metric' ? 'C' : 'F'}</Text>
+                                <View style={styles.column}>
+                                    <Text style={[styles.temp, { color: themeApp.textTitle }]}>{parseInt(weatherState.value.current.temp)} °{settingsState.value.unitsTemp == 'metric' ? 'C' : 'F'}</Text>
                                     <TempButtonGroup />
                                 </View>
                             </View>
                             <DailyForecastCard data={weatherState.value.daily} />
                         </>
-                    }
-                />
+                    } />
                 : <>
-                    <MaterialIcons name="location-off" size={192} color={themeApp.textTitle} />
-                    <Text style={{ color: themeApp.textTitle, fontWeight: 'bold', fontSize: 24 }}>No Data Found</Text>
+                    <NotFoundPage />
                 </>
             }
         </View >
@@ -70,6 +57,26 @@ const styles = StyleSheet.create({
         marginTop: 'auto',
         marginBottom: 'auto'
     },
+    bg: {
+        paddingHorizontal: 10,
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    title: {
+        fontSize: 22,
+        fontWeight: 'bold',
+        alignSelf: 'center',
+    },
+    column: {
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    temp: {
+        fontSize: 18,
+        fontWeight: 'bold',
+    }
 });
 
 export default HomeScreen;

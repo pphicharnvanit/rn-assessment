@@ -3,29 +3,19 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 import { useSelector, useDispatch } from "react-redux";
 import { fetchCurrentWeather } from "../context/WeatherContext";
 import { setCurrentLocation } from "../context/SettingsContext";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { storeData } from "../context/StorageContext";
 
 const SearchScreen = ({ navigation }) => {
     const dispatch = useDispatch();
     const settingsState = useSelector((state) => state.settings);
     const weatherState = useSelector((state) => state.weather);
-    const { getItem, setItem } = AsyncStorage;
-
-    async function storeData() {
-        try {
-            await setItem("weatherData", JSON.stringify(weatherState.value));
-            navigation.pop();
-        } catch (error) {
-            alert(error);
-        }
-    }
 
     return (
         <GooglePlacesAutocomplete
             GooglePlacesDetailsQuery={{ fields: "geometry" }}
             fetchDetails={true}
-            placeholder='Search'
-            onPress={(data, details = null) => {
+            placeholder='Search location'
+            onPress={async (data, details = null) => {
                 const location = details?.geometry?.location;
                 const curlocation = { location: { lat: location.lat, lon: location.lng } };
                 dispatch(setCurrentLocation(curlocation));
@@ -37,7 +27,8 @@ const SearchScreen = ({ navigation }) => {
                     "unitsTemp": settingsState.value.unitsTemp
                 };
                 dispatch(fetchCurrentWeather(params));
-                storeData();
+                await storeData(weatherState.value);
+                navigation.pop();
             }}
 
             query={{
